@@ -54,18 +54,18 @@ def siec(ingame_time, network_number):
         case 5:
             network_calc(ingame_time, 10)
         case _:
-            print("!!! Błąd, zła sieć !!!")
+            print("!!! Error, wrong network !!!")
             time.sleep(2)
             clear()
 
 
 while True:
     print("________________________________")
-    print("1: TP")
-    print("2: DD")
-    print("3: TC")
-    print("4: do")
-    print("5: Fr")
+    print("1: TPLINK_8907_5G")
+    print("2: DDW35363")
+    print("3: TC8717T10")
+    print("4: doody")
+    print("5: FreeWifiNoVirus")
     print("________________________________")
     UserIn = list(map(int, input().split()))
     siec(UserIn[0], UserIn[1])

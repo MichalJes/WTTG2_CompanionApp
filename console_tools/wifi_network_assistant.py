@@ -9,7 +9,7 @@ def clear(): return os.system('cls')
 
 def time_calc(in_time, a):
     hour = math.floor(in_time/100)
-    min = in_time % 60
+    min = in_time % 100
     min = min+a
     if min > 60:
         min = min % 60
@@ -26,18 +26,33 @@ def BEEP(iterations):
         iterations -= 1
 
 
+def BEEPlong(iterations):
+    while iterations > 0:
+        winsound.Beep(2000, 800)
+        time.sleep(0.1)
+        iterations -= 1
+
+
+def wait(CountTime):
+    while CountTime > 0:
+        time.sleep(1)
+        print(CountTime)
+        CountTime -= 1
+
+
 def network_calc(ingame_t, network_time):
     end_time = time_calc(ingame_t, network_time)
     if end_time < 1000:
         end_time = str(0)+str(end_time)
     end_time_S = str(end_time)
     print("Start: " + str(ingame_t) + " End: " + end_time_S)
-    time.sleep((network_time-2)*60)
+    wait(math.floor(((network_time-2)*60)/2))
     BEEP(2)
     print("! 2 min !")
     print("End time: " + str(end_time))
-    time.sleep(120)
-    BEEP(4)
+    wait(120)
+    BEEP(3)
+    BEEPlong(1)
     print("!!! Disconnect !!!")
 
 

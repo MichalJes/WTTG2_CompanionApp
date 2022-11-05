@@ -1,1 +1,1 @@
-# WTTG_scripts
+# WTTG2_CompanionApp

@@ -53,13 +53,10 @@ class MainFrame(wx.Frame):
 
         progressDialog = ProgressFrame(None, btn_label, wifi_time)
         progressDialog.Show()
-        # progressDialog.StartTimer(wifi_time)
-        self.StartThread(progressDialog.StartTimer, wifi_time)
 
-    def StartThread(self,function, wifi_time):
+    def StartThread(self, function, wifi_time):
         new_thread = threading.Thread(target=function, args=[wifi_time])
         new_thread.start()
-        # new_thread.join()
 
 
 class ProgressFrame(wx.Frame):
@@ -69,13 +66,18 @@ class ProgressFrame(wx.Frame):
         self.Centre(wx.BOTH)
         self.Show()
 
-    def BEEP(iterations, event):
+        self.timer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self.UpdateTimer, self.timer)
+
+        self.StartTimer(self, wifi_time)
+
+    def BEEP(self, event, iterations):
         while iterations > 0:
             winsound.Beep(2000, 200)
             time.sleep(0.1)
             iterations -= 1
 
-    def BEEPlong(iterations, event):
+    def BEEPlong(self, event, iterations):
         while iterations > 0:
             winsound.Beep(2000, 800)
             time.sleep(0.1)
@@ -113,19 +115,27 @@ class ProgressFrame(wx.Frame):
     def OnClose(self, event):
         self.Close()
 
-    def StartTimer(self, wifi_time):
-        self.i = wifi_time
-        for i in range(wifi_time, -1, -1):
-            self.gauge.SetValue(self.i)
-            self.message.SetValue(str(self.i)+" seconds left")
-            if self.i == 120:
-                self.BEEP(2)
-            elif self.i == 0:
-                self.BEEP(3)
-                self.BEEPlong(1)
-                return
-            # self.progressDialog.Show()
-            time.sleep(0.05)
+    def StartTimer(self, event, wifi_time):
+        self.timerStart = time.time()
+        self.count = wifi_time
+        self.timer.Start(995)
+
+    def StopTimer(self, event):
+        self.timerStop = time.time()
+        self.timer.Stop()
+        print(self.timerStop-self.timerStart)
+
+    def UpdateTimer(self, event):
+        self.gauge.SetValue(self.count)
+        self.message.SetValue(str(self.count)+" seconds left")
+        if self.count == 120:
+            self.BEEP(self, 2)
+        elif self.count == 0:
+            self.BEEP(self, 3)
+            self.BEEPlong(self, 1)
+            self.StopTimer(self)
+            return
+        self.count -= 1
 
 
 if __name__ == '__main__':
